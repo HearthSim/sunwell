@@ -3,13 +3,16 @@ import * as fs from "fs";
 
 import IPlatform from "./IPlatform";
 
+export {Canvas, CanvasRenderingContext2D as Context, Image} from "canvas";
+
 export default class NodePlatform implements IPlatform {
 	public name = "NODE";
 	public buffers = [];
 	public Image = Canvas.Image;
+	public Canvas = Canvas.Canvas;
 	public Promise = Promise;
 
-	public getBuffer(width: number, height: number, clear: boolean): void {
+	public getBuffer(width: number, height: number, clear: boolean): Canvas.Canvas {
 		return Canvas.createCanvas(width, height);
 	}
 

@@ -1,3 +1,4 @@
+import {Context} from "../platforms/CurrentPlatform";
 import Component from "./Component";
 
 export default class EliteDragon extends Component {
@@ -5,7 +6,7 @@ export default class EliteDragon extends Component {
 		return [this.parent.getEliteDragonAsset()];
 	}
 
-	public render(context: CanvasRenderingContext2D, ratio: number): void {
+	public render(context: Context, ratio: number): void {
 		const asset = this.parent.getEliteDragonAsset();
 		if (!asset) {
 			return;

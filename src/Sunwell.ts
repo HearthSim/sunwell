@@ -1,8 +1,5 @@
-/*#if _PLATFORM == "node"
-import Platform from "./platforms/NodePlatform.ts";
-//#else */
-import Platform from "./platforms/WebPlatform";
-//#endif
+/* tslint:disable:no-console */
+import Platform, {Context, Canvas, Image} from "./platforms/CurrentPlatform";
 
 import Card from "./Card";
 import {CardType} from "./Enums";
@@ -19,7 +16,7 @@ import SpellCardPremium from "./SpellCardPremium";
 import WeaponCard from "./WeaponCard";
 import WeaponCardPremium from "./WeaponCardPremium";
 
-interface ISunwellOptions {
+type ISunwellOptions = Partial<{
 	titleFont: string;
 	bodyFontRegular: string;
 	bodyFontBold: string;
@@ -35,18 +32,18 @@ interface ISunwellOptions {
 	drawTimeout: number;
 	cacheSkeleton: boolean;
 	debug: boolean;
-}
+}>;
 
 export default class Sunwell {
 	public options: ISunwellOptions;
-	public assets: {[key: string]: HTMLImageElement};
-	public canvas: HTMLCanvasElement;
+	public assets: Record<string, Image>;
+	public canvas: Canvas;
 	public target: any;
 	public platform: Platform;
 	public renderCache: {[cacheKey: string]: any};
 
 	private assetListeners: {
-		[path: string]: Array<(HTMLCanvasElement) => void>;
+		[path: string]: ((Canvas) => void)[];
 	};
 	private renderQuery: {[key: string]: Card};
 	private isRendering: boolean;
@@ -87,7 +84,7 @@ export default class Sunwell {
 		console.log.apply("[ERROR]", arguments);
 	}
 
-	public drawImage(context: CanvasRenderingContext2D, assetKey: string, coords: ICoords): void {
+	public drawImage(context: Context, assetKey: string, coords: ICoords): void {
 		const asset = this.getAsset(assetKey);
 		if (!asset) {
 			this.error("Not drawing asset", assetKey);
@@ -114,7 +111,7 @@ export default class Sunwell {
 		const assetListeners = this.assetListeners;
 		const sw = this;
 
-		return new this.platform.Promise(resolve => {
+		return new this.platform.Promise((resolve) => {
 			if (assets[path] === undefined) {
 				assets[path] = new sw.platform.Image();
 
@@ -146,11 +143,11 @@ export default class Sunwell {
 		});
 	}
 
-	public getBuffer(width?: number, height?: number, clear?: boolean): HTMLCanvasElement {
+	public getBuffer(width?: number, height?: number, clear?: boolean): Canvas {
 		return this.platform.getBuffer(width, height, clear);
 	}
 
-	public freeBuffer(buffer: HTMLCanvasElement) {
+	public freeBuffer(buffer: Canvas) {
 		return this.platform.freeBuffer(buffer);
 	}
 
@@ -185,7 +182,7 @@ export default class Sunwell {
 		}
 
 		this.log("Preparing to load assets");
-		const fetches: Array<Promise<{}>> = [];
+		const fetches: Promise<{}>[] = [];
 		for (const texture of texturesToLoad) {
 			fetches.push(this.fetchAsset(texture));
 		}
@@ -201,7 +198,7 @@ export default class Sunwell {
 					this.renderTick();
 				}
 			})
-			.catch(e => {
+			.catch((e) => {
 				this.error("Error while drawing card:", e);
 				this.isRendering = false;
 			});
@@ -235,12 +232,12 @@ export default class Sunwell {
 		width: number,
 		premium: boolean,
 		target,
-		callback?: (HTMLCanvasElement) => void
+		callback?: (canvas: Canvas) => void
 	): Card {
-		let canvas: HTMLCanvasElement;
+		let canvas: Canvas;
 		const height = Math.round(width * this.options.aspectRatio);
 
-		if (target && target instanceof HTMLCanvasElement) {
+		if (target && target instanceof this.platform.Canvas) {
 			canvas = target;
 			canvas.width = width;
 			canvas.height = height;

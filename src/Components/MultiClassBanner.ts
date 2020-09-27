@@ -1,4 +1,5 @@
 import {ICoords} from "../interfaces";
+import {Context} from "../platforms/CurrentPlatform";
 import Component from "./Component";
 
 export default class MultiClassBanner extends Component {
@@ -6,7 +7,7 @@ export default class MultiClassBanner extends Component {
 		return [this.parent.getMultiClassBannerAsset()];
 	}
 
-	public render(context: CanvasRenderingContext2D, ratio: number): void {
+	public render(context: Context, ratio: number): void {
 		const asset = this.parent.getMultiClassBannerAsset();
 		if (!asset) {
 			return;

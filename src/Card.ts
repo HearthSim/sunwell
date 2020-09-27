@@ -15,6 +15,7 @@ import {CardClass, CardSet, MultiClassGroup, Rarity} from "./Enums";
 import {getCardFrameClass, getNumberStyle, getRaceText, getRarityGem} from "./helpers";
 import {ICoords, IPoint} from "./interfaces";
 import Sunwell from "./Sunwell";
+import {Canvas, Context, Image} from "./platforms/CurrentPlatform";
 
 const ReferenceWidth = 670;
 
@@ -22,7 +23,7 @@ export default abstract class Card {
 	public cardDef: CardDef;
 	public target;
 	public texture;
-	public canvas: HTMLCanvasElement;
+	public canvas: Canvas;
 	public raceText: string;
 	public language: string;
 	public costColor: string;
@@ -75,7 +76,7 @@ export default abstract class Card {
 	public abstract cardFoundationCoords: ICoords;
 	public abstract premium: boolean;
 
-	private callback: (HTMLCanvasElement) => void;
+	private callback: (Canvas) => void;
 	private cacheKey: number;
 	private propsJson: string;
 	private sunwell: Sunwell;
@@ -159,7 +160,7 @@ export default abstract class Card {
 		return null;
 	}
 
-	public initRender(width: number, target, callback?: (HTMLCanvasElement) => void): void {
+	public initRender(width: number, target, callback?: (canvas: Canvas) => void): void {
 		this.width = width;
 		this.target = target;
 		this.callback = callback;
@@ -195,7 +196,7 @@ export default abstract class Card {
 		return assetsToLoad;
 	}
 
-	public getCardArtTexture(): HTMLImageElement | HTMLCanvasElement {
+	public getCardArtTexture(): Image | Canvas {
 		if (!this.texture) {
 			this.sunwell.log("No card texture specified. Creating empty texture.");
 			return this.sunwell.getBuffer(1024, 1024);
@@ -221,7 +222,7 @@ export default abstract class Card {
 		}
 	}
 
-	public draw(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D): void {
+	public draw(canvas: Canvas, context: Context): void {
 		const ratio = this.width / ReferenceWidth;
 
 		const drawTimeout = setTimeout(() => {
@@ -281,7 +282,7 @@ export default abstract class Card {
 		return this.cardDef.collectionText || this.cardDef.text;
 	}
 
-	public drawCardFoundationAsset(context: CanvasRenderingContext2D, ratio: number): void {
+	public drawCardFoundationAsset(context: Context, ratio: number): void {
 		const coords = this.cardFoundationCoords;
 		coords.ratio = ratio;
 		this.sunwell.drawImage(context, this.cardFoundationAsset, coords);

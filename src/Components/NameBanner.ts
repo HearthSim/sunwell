@@ -1,6 +1,7 @@
 import chars from "chars";
 import {getPointOnCurve} from "../helpers";
 import {ICoords, IPoint} from "../interfaces";
+import {Context} from "../platforms/CurrentPlatform";
 import Component from "./Component";
 
 function getCharDimensions(text: string, textContext) {
@@ -33,7 +34,7 @@ export default class NameBanner extends Component {
 		return [this.parent.nameBannerAsset];
 	}
 
-	public render(context: CanvasRenderingContext2D, ratio: number) {
+	public render(context: Context, ratio: number) {
 		if (this.parent.nameBannerAsset) {
 			const coords = this.parent.nameBannerCoords;
 			coords.ratio = ratio;
@@ -43,7 +44,7 @@ export default class NameBanner extends Component {
 		this.renderName(context, ratio, this.parent.cardDef.name);
 	}
 
-	private renderName(context: CanvasRenderingContext2D, ratio: number, name: string): void {
+	private renderName(context: Context, ratio: number, name: string): void {
 		// define a box to contain the curved text
 		const boxDims = {width: 460, height: 160};
 		const boxBottomCenter = {x: 335, y: 612};

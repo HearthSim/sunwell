@@ -1,6 +1,7 @@
 import Card from "../Card";
 import {contextBoundingBox} from "../helpers";
 import {ICoords} from "../interfaces";
+import {Context} from "../platforms/CurrentPlatform";
 import Sunwell from "../Sunwell";
 import Component from "./Component";
 
@@ -23,7 +24,7 @@ export default class Gem extends Component {
 		return [this.gemAsset];
 	}
 
-	public render(context: CanvasRenderingContext2D, ratio: number): void {
+	public render(context: Context, ratio: number): void {
 		const asset = this.gemAsset;
 		if (asset && this.showGem) {
 			const coords = this.gemCoords;

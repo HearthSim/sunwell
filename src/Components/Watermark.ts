@@ -1,4 +1,5 @@
 import {CardType} from "../Enums";
+import {Context} from "../platforms/CurrentPlatform";
 import Component from "./Component";
 
 export default class Watermark extends Component {
@@ -6,7 +7,7 @@ export default class Watermark extends Component {
 		return [this.parent.getWatermarkAsset()];
 	}
 
-	public render(context: CanvasRenderingContext2D, ratio: number): void {
+	public render(context: Context, ratio: number): void {
 		const asset = this.parent.getWatermarkAsset();
 		if (!asset) {
 			return;

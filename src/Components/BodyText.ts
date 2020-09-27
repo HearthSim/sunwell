@@ -3,6 +3,7 @@ import LineBreaker from "linebreak";
 import {CardType} from "../Enums";
 import {contextBoundingBox} from "../helpers";
 import Component from "./Component";
+import {Canvas, Context} from "../platforms/CurrentPlatform";
 
 const CTRL_MANUAL_LINEBREAKS = "\x10";
 const CTRL_BOLD_START = "\x11";
@@ -14,9 +15,9 @@ const CTRL_ITALIC_END = "\x14";
  * Finishes a text line and starts a new one.
  */
 function finishLine(
-	bufferTextCtx: CanvasRenderingContext2D,
-	bufferRow: HTMLCanvasElement,
-	bufferRowCtx: CanvasRenderingContext2D,
+	bufferTextCtx: Context,
+	bufferRow: Canvas,
+	bufferRowCtx: Context,
 	xPos: number,
 	yPos: number,
 	totalWidth: number
@@ -49,7 +50,7 @@ function finishLine(
 }
 
 export default class BodyText extends Component {
-	public render(context: CanvasRenderingContext2D, ratio: number): void {
+	public render(context: Context, ratio: number): void {
 		this.drawBodyText(context, ratio, false);
 	}
 
@@ -85,11 +86,7 @@ export default class BodyText extends Component {
 		return text;
 	}
 
-	private drawBodyText(
-		context: CanvasRenderingContext2D,
-		ratio: number,
-		forceSmallerFirstLine: boolean
-	): void {
+	private drawBodyText(context: Context, ratio: number, forceSmallerFirstLine: boolean): void {
 		let xPos = 0;
 		let yPos = 0;
 		let italic = 0;
@@ -321,11 +318,7 @@ export default class BodyText extends Component {
 		return [weight, style, fontSize, `"${font}", sans-serif`].join(" ");
 	}
 
-	private getLineWidth(
-		context: CanvasRenderingContext2D,
-		fontSize: number,
-		line: string
-	): number {
+	private getLineWidth(context: Context, fontSize: number, line: string): number {
 		let width = 0;
 		let bold = 0;
 		let italic = 0;

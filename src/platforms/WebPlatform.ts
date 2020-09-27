@@ -1,8 +1,13 @@
 import IPlatform from "./IPlatform";
 
+export type Canvas = HTMLCanvasElement;
+export type Context = CanvasRenderingContext2D;
+export type Image = HTMLImageElement;
+
 export default class WebPlatform implements IPlatform {
 	public name = "WEB";
 	public Image = Image;
+	public Canvas = HTMLCanvasElement;
 	public Promise = Promise;
 	public buffers = [];
 

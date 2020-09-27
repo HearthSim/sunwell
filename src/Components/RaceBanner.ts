@@ -1,5 +1,6 @@
 import chars from "chars";
 import {contextBoundingBox} from "../helpers";
+import {Context} from "../platforms/CurrentPlatform";
 import Component from "./Component";
 
 export default class RaceBanner extends Component {
@@ -7,7 +8,7 @@ export default class RaceBanner extends Component {
 		return [this.parent.raceBannerAsset];
 	}
 
-	public render(context: CanvasRenderingContext2D, ratio: number) {
+	public render(context: Context, ratio: number) {
 		if (!this.parent.raceBannerAsset || !this.parent.raceText) {
 			return;
 		}

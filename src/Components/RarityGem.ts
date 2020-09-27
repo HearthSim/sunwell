@@ -1,3 +1,4 @@
+import {Context} from "../platforms/CurrentPlatform";
 import Component from "./Component";
 
 export default class RarityGem extends Component {
@@ -5,7 +6,7 @@ export default class RarityGem extends Component {
 		return [this.parent.getRarityGemAsset()];
 	}
 
-	public render(context: CanvasRenderingContext2D, ratio: number): void {
+	public render(context: Context, ratio: number): void {
 		const asset = this.parent.getRarityGemAsset();
 		if (!asset) {
 			return;
